@@ -3,13 +3,13 @@
             padding: 0;
             overflow: hidden;
             height: 100%;
-            background: #000;
+            background: radial-gradient(ellipse at top, #071130 0%, #000 60%);
         }
 
         /* Canvas styling to make it fill the screen */
         canvas {
             display: block;
-            background: #0a0a1a; /* Dark blue-black for a night sky feel */
+            background: linear-gradient(180deg, rgba(10,10,26,0.8), rgba(0,0,0,0.95)); /* night sky */
         }
         
         /* Styling for the instruction text */
@@ -25,6 +25,32 @@
             pointer-events: none; /* Allows clicks to go through the text */
             animation: fadeIn 2s ease-in-out;
         }
+
+        /* Controls panel */
+        #controls {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            background: rgba(0,0,0,0.45);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+            z-index: 10;
+        }
+
+        .control-row { display:flex; align-items:center; gap:8px; margin:6px 0; }
+
+        #controls label { min-width:70px; color: #e6eef8; }
+        #controls input[type=range] { width:130px; }
+        #controls button { background: linear-gradient(180deg,#ff7a18,#ff3d00); border: none; color:white; padding:6px 10px; border-radius:6px; cursor:pointer; }
+        #controls button:active { transform: translateY(1px); }
+
+        #particleValue, #intervalValue { min-width:40px; text-align:right; color:#cfe6ff; }
+*** End Patch
 
         @keyframes fadeIn {
             from { opacity: 0; }

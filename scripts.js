@@ -36,11 +36,7 @@ function getRandomColor() {
     return `hsl(${hue}, 100%, 50%)`;
 }
         
-        // Resize canvas when the window is resized
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+// (handled by resizeCanvas)
 
 // --- Particle Class ---
 // Represents a single spark from an explosion
@@ -170,8 +166,8 @@ function animate() {
 
     // Draw a semi-transparent background to create a trail effect
     ctx.fillStyle = 'rgba(8, 8, 20, 0.16)';
-    // Because canvas is scaled by devicePixelRatio, use CSS size for rect
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Use CSS pixel size so the scaled context maps correctly
+    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
     if (!isRunning) return; // freeze animation when paused
 
@@ -192,15 +188,7 @@ function launchFirework(targetX, targetY) {
     fireworks.push(new Firework(startX, startY, targetX, targetY));
 }
 
-        // Launch on click/tap
-        canvas.addEventListener('click', (e) => {
-            launchFirework(e.clientX, e.clientY);
-        });
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Prevent default touch behavior
-            const touch = e.touches[0];
-            launchFirework(touch.clientX, touch.clientY);
-        });
+// Launch on click/tap (wired below once)
 
 // Launch automatically
 function autoLaunch() {
@@ -251,15 +239,11 @@ launchBtn.addEventListener('click', () => {
     autoLaunch();
 });
 
-// Keyboard: space toggles play/pause
-window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-        e.preventDefault();
-        playPauseBtn.click();
-    }
-});
+// Initialize control displays
+if (particleRange && particleValue) particleValue.textContent = String(particleRange.value || PARTICLE_COUNT);
+if (intervalRange && intervalValue) intervalValue.textContent = String(intervalRange.value || LAUNCH_INTERVAL);
 
-// Launch on click/tap
+// Single click/touch listeners
 canvas.addEventListener('click', (e) => {
     launchFirework(e.clientX, e.clientY);
 });
@@ -268,6 +252,15 @@ canvas.addEventListener('touchstart', (e) => {
     const touch = e.touches[0];
     launchFirework(touch.clientX, touch.clientY);
 });
+
+// Keyboard: space toggles play/pause
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+        e.preventDefault();
+        playPauseBtn.click();
+    }
+});
+
 
 // Start animation and auto-launch
 startAutoLaunch();
